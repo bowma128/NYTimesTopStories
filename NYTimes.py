@@ -10,12 +10,17 @@ import requests # For accessing the API.
 import json # For parsing data.
 
 def createURL(category, api_key):
+    # All Top Stories API calls are in the form:
+    # https://api.nytimes.com/svc/topstories/v2/<category>.json?api-key=<key>
+    # Where <category> is a category from a list and <key> is an API Key
+    #    Gotten from the NYT.
     # Takes as input the category to search and the API key, and returns
     #   a URL to make a request to.
     return "https://api.nytimes.com/svc/topstories/v2/"+category+".json?api-key="+api_key
 
 def getRawData(category, api_key):
-    ## Gets raw text from the API.
+    ## Gets raw text from the API and returns it.
+    ## Create a URL to request from.
     url = createURL(category, api_key)
     ## Use the requests module to get raw data from the API.
     r = requests.get(url)
@@ -30,7 +35,7 @@ def getRawData(category, api_key):
         return False
 
 def showFullData(category, api_key):
-    ## Gets the data, parses it, and displays it.
+    ## Gets the data, parses it (using the json module), and displays it.
     raw = getRawData(category, api_key)
     print (json.dumps(json.loads(raw),indent=4))
 
@@ -75,7 +80,7 @@ if __name__ == "__main__":
 
     print("\n\n")
     print("Example 3: Top headlines in multiple categories")
-    print("Categories: "+", ".join(categories))    
+    print("Categories: "+", ".join(categories))
     categoryList = input("Please input a set of categories, separated by a space.").split(" ")
     for c in categoryList:
         if c not in categories:
